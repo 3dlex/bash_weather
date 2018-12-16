@@ -18,7 +18,6 @@ conditions=()
 
 #Pull fresh weather data:
 # Change to KLEX to your location.
-#curl -s http://w1.weather.gov/xml/current_obs/KLEX.xml > /home/${USER}/bin/weather.xml
 curl -s http://w1.weather.gov/xml/current_obs/KLEX.xml > /tmp/weather.xml
 
 #Grab the current conditions:
