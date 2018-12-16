@@ -1,0 +1,38 @@
+#!/bin/bash
+# Created by: Matthew Davidson
+# Date 03/26/2017
+# Updated 12/15/18
+# Purpose: Convenient command line tool to retrieve current weather
+#  and practice BASH skills.
+
+#Set varaibles:
+# We need to extract data from the XML file that we download.
+# We want the location, time, and several conditions, but there are others
+# that we could also pull.
+declare -a weather
+weather=('location' 'observation_time' 'weather' 'temperature_string' 'wind_dir' 'wind_mph' 'relative_humidity' 'pressure_string' 'dewpoint_string')
+
+#Declare an array to hold the current conditons.
+declare -a conditions
+conditions=()
+
+#Pull fresh weather data:
+# Change to KLEX to your location.
+curl -s http://w1.weather.gov/xml/current_obs/KLEX.xml > /home/matthew/bin/weather.xml
+
+#Grab the current conditions:
+for i in "${weather[@]}"
+do
+	w=`xmllint --xpath 'string(//'$i')' /home/matthew/bin/weather.xml`
+	conditions+=("$w")
+done
+
+#Now echo array as the current weather.
+echo "The weather for: ${conditions[0]}"
+echo ${conditions[1]}
+echo "Current conditions: ${conditions[2]}"
+echo "Current temperature is: ${conditions[3]}"
+echo "The wind is from the ${conditions[4]} at ${conditions[5]} mph"
+echo "Relative Humidity is ${conditions[6]}%"
+echo "The barometric pressure is: ${conditions[7]}"
+echo "The dewpoint is: ${conditions[8]}"
