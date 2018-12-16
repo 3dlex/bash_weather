@@ -10,7 +10,7 @@
 # We want the location, time, and several conditions, but there are others
 # that we could also pull.
 declare -a weather
-weather=('location' 'observation_time' 'weather' 'temperature_string' 'wind_dir' 'wind_mph' 'relative_humidity' 'pressure_string' 'dewpoint_string')
+weather=('location' 'observation_time' 'weather' 'temperature_string' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_string' 'dewpoint_string')
 
 #Declare an array to hold the current conditons.
 declare -a conditions
@@ -33,6 +33,7 @@ echo ${conditions[1]}
 echo "Current conditions: ${conditions[2]}"
 echo "Current temperature is: ${conditions[3]}"
 echo "The wind is from the ${conditions[4]} at ${conditions[5]} mph"
-echo "Relative Humidity is ${conditions[6]}%"
-echo "The barometric pressure is: ${conditions[7]}"
-echo "The dewpoint is: ${conditions[8]}"
+echo "The wind chill is: ${conditions[6]} F"
+echo "Relative Humidity is ${conditions[7]}%"
+echo "The barometric pressure is: ${conditions[8]}"
+echo "The dewpoint is: ${conditions[9]}"
