@@ -1,38 +1,46 @@
 #!/bin/bash
 # Created by: Matthew Davidson
 # Date 03/26/2017
-# Updated 12/15/18
 # Purpose: Convenient command line tool to retrieve current weather
-#  and practice BASH skills.
+
+# Requires:
+# API key from wunderground.com
+# The xmllint package.
 
 #Set varaibles:
+tmpfile="/tmp/weather.xml"
 # We need to extract data from the XML file that we download.
 # We want the location, time, and several conditions, but there are others
 # that we could also pull.
 declare -a weather
-weather=('location' 'observation_time' 'weather' 'temperature_string' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_in' 'dewpoint_string')
+weather=('full' 'observation_time' 'weather' 'temp_f' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_in' 'pressure_trend')
 
 #Declare an array to hold the current conditons.
 declare -a conditions
 conditions=()
 
 #Pull fresh weather data:
-# Change to KLEX to your location.
-curl -s -k https://w1.weather.gov/xml/current_obs/KLEX.xml > /tmp/weather.xml
+# Add your API key and change to your location.
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
 
 #Grab the current conditions:
 for i in "${weather[@]}"
 do
-	w=`xmllint --xpath 'string(//'$i')' /tmp/weather.xml`
+	w=`xmllint --xpath 'string(//'$i')' ${tmpfile}`
 	conditions+=("$w")
 done
 
 #Now echo array as the current weather.
-echo "The weather for: ${conditions[0]}"
+echo "Forecast for: ${conditions[0]}"
 echo ${conditions[1]}
 echo "Current conditions: ${conditions[2]}"
-echo "Current temperature is: ${conditions[3]}"
-echo "The wind is from the ${conditions[4]} at ${conditions[5]} mph with a wind chill of ${conditions[6]} F"
-echo "Relative Humidity is ${conditions[7]}%"
+echo "Current temperature is: ${conditions[3]} F"
+echo "The wind is from the ${conditions[4]} at ${conditions[5]} with a wind chill of ${conditions[6]} F"
+echo "Relative Humidity is ${conditions[7]}"
 echo "The barometric pressure is: ${conditions[8]}"
-echo "The dewpoint is: ${conditions[9]}"
+echo "Pressure trending (+/-): ${conditions[9]}"
+
+#echo "Send output to CSV for historical records."
+#(IFS=,; echo $today, "${conditions[*]}") | sed -e "s/KY\,//" >> /home/$USER/bin/weather_results.csv
+(IFS=,; echo "${conditions[*]}") | sed -e "s/KY\,//" | sed -e "s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
+#rm /home/$USER/bin/weather.xml
