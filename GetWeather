@@ -41,6 +41,5 @@ echo "The barometric pressure is: ${conditions[8]}"
 echo "Pressure trending (+/-): ${conditions[9]}"
 
 #echo "Send output to CSV for historical records."
-#(IFS=,; echo $today, "${conditions[*]}") | sed -e "s/KY\,//" >> /home/$USER/bin/weather_results.csv
 (IFS=,; echo "${conditions[*]}") | sed -e "s/KY\,//" | sed -e "s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
-#rm /home/$USER/bin/weather.xml
+rm ${tmpfile}
