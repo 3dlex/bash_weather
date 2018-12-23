@@ -22,12 +22,12 @@ conditions=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
 
 #Grab the current conditions:
 for i in "${weather[@]}"
 do
-	w=`xmllint --xpath 'string(//'$i')' ${tmpfile}`
+    w=$(xmllint --xpath 'string(//'$i')' ${tmpfile})
 	conditions+=("$w")
 done
 
