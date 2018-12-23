@@ -1,7 +1,7 @@
 #!/bin/bash
 # Created by: Matthew Davidson
 # Date 03/26/2017
-# UPdated 12/22/2018
+# Updated 12/22/2018
 # Purpose: Convenient command line tool to retrieve current weather
 
 # Requires:
@@ -22,13 +22,13 @@ conditions=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
 
 #Grab the current conditions:
 for i in "${weather[@]}"
 do
     w=$(xmllint --xpath 'string(//'$i')' ${tmpfile})
-	conditions+=("$w")
+    conditions+=("$w")
 done
 
 #Now echo array as the current weather.
