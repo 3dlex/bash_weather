@@ -17,39 +17,39 @@ VERSION="2.0"
 SCRIPTNAME=$(basename "$0")
 SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # TMP file for current weather report
-tmpfile="/tmp/weather.xml"
+TMPFILE="/tmp/weather.xml"
 #
 # We need to extract data from the XML file that we download.
 # We want the location, time, and several conditions, but there are others
 # that we could also pull.
-declare -a weather
-weather=('full' 'observation_time' 'weather' 'temp_f' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_in' 'pressure_trend')
+declare -a WEATHER
+WEATHER=('full' 'observation_time' 'weather' 'temp_f' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_in' 'pressure_trend')
 
 #Declare an array to hold the current conditons.
-declare -a conditions
-conditions=()
+declare -a CONDITIONS
+CONDITIONS=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${TMPFILE}
 
 #Grab the current conditions:
-for i in "${weather[@]}"
+for i in "${WEATHER[@]}"
 do
-    w=$(xmllint --xpath 'string(//'$i')' ${tmpfile})
-    conditions+=("$w")
+    W=$(xmllint --xpath 'string(//'$i')' ${TMPFILE})
+    CONDITIONS+=("$W")
 done
 
 #Now echo array as the current weather.
-echo "Forecast for: ${conditions[0]}"
-echo ${conditions[1]}
-echo "Current conditions: ${conditions[2]}"
-echo "Current temperature is: ${conditions[3]} F"
-echo "The wind is from the ${conditions[4]} at ${conditions[5]} with a wind chill of ${conditions[6]} F"
-echo "Relative Humidity is ${conditions[7]}"
-echo "The barometric pressure is: ${conditions[8]}"
-echo "Pressure trending (+/-): ${conditions[9]}"
+echo "Forecast for: ${CONDITIONS[0]}"
+echo ${CONDITIONS[1]}
+echo "Current conditions: ${CONDITIONS[2]}"
+echo "Current temperature is: ${CONDITIONS[3]} F"
+echo "The wind is from the ${CONDITIONS[4]} at ${CONDITIONS[5]} with a wind chill of ${CONDITIONS[6]} F"
+echo "Relative Humidity is ${CONDITIONS[7]}"
+echo "The barometric pressure is: ${CONDITIONS[8]}"
+echo "Pressure trending (+/-): ${CONDITIONS[9]}"
 
 #echo "Send output to CSV for historical records."
-(IFS=,; echo "${conditions[*]}") | sed -e "s/KY\,//" | sed -e "s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
-rm ${tmpfile}
+(IFS=,; echo "${CONDITIONS[*]}") | sed -e "s/KY\,//" | sed -e "s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
+rm ${TMPFILE}
