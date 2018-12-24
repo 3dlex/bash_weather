@@ -23,7 +23,8 @@ TMPFILE="/tmp/weather.xml"
 # We want the location, time, and several conditions, but there are others
 # that we could also pull.
 declare -a WEATHER
-WEATHER=('full' 'observation_time' 'weather' 'temp_f' 'wind_dir' 'wind_mph' 'windchill_f' 'relative_humidity' 'pressure_in' 'pressure_trend')
+WEATHER=('full' 'observation_time' 'weather' 'temp_f' 'wind_dir' 'wind_mph' \
+'windchill_f' 'relative_humidity' 'pressure_in' 'pressure_trend')
 
 #Declare an array to hold the current conditons.
 declare -a CONDITIONS
@@ -31,7 +32,7 @@ CONDITIONS=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${TMPFILE}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${TMPFILE}
 
 #Grab the current conditions:
 for i in "${WEATHER[@]}"
@@ -50,6 +51,8 @@ echo "Relative Humidity is ${CONDITIONS[7]}"
 echo "The barometric pressure is: ${CONDITIONS[8]}"
 echo "Pressure trending (+/-): ${CONDITIONS[9]}"
 
-#echo "Send output to CSV for historical records."
-(IFS=,; echo "${CONDITIONS[*]}") | sed -e "s/KY\,//" | sed -e "s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
+#Send output to CSV for historical records.
+#This is one command. Note the line split at column 63
+(IFS=,; echo "${CONDITIONS[*]}") | sed -e "s/KY\,//" | sed -e \
+"s/Last\ Updated\ on\ //" | sed -e "s/\, /,/g" >> /home/$USER/bin/weather_results.csv
 rm ${TMPFILE}
