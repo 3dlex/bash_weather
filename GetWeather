@@ -1,15 +1,24 @@
 #!/bin/bash
-# Created by: Matthew Davidson
+#
+# Description: Convenient command line tool to retrieve current weather
+#
+# Author: Matthew Davidson
 # Date 03/26/2017
 # Updated 12/22/2018
-# Purpose: Convenient command line tool to retrieve current weather
-
+#
+##########################################################
 # Requires:
 # API key from wunderground.com
 # The xmllint package.
-
-#Set varaibles:
+#
+##########################################################
+#Global Setup and variables
+VERSION="2.0"
+SCRIPTNAME=$(basename "$0")
+SCRIPTPATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# TMP file for current weather report
 tmpfile="/tmp/weather.xml"
+#
 # We need to extract data from the XML file that we download.
 # We want the location, time, and several conditions, but there are others
 # that we could also pull.
@@ -22,7 +31,7 @@ conditions=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxxxxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${tmpfile}
 
 #Grab the current conditions:
 for i in "${weather[@]}"
