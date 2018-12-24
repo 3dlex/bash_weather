@@ -1,1 +1,1 @@
-# bash_weather
+# BASH Script for weather forcast
