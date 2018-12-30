@@ -32,7 +32,7 @@ CONDITIONS=()
 
 #Pull fresh weather data:
 # Add your API key and change to your location.
-curl -s http://api.wunderground.com/api/xxxxxxxxxxxx/conditions/q/KY/Midway.xml > ${TMPFILE}
+curl -s http://api.wunderground.com/api/xxxxxxxxxxxx/conditions/q/KY/Lexington.xml > ${TMPFILE}
 
 #Grab the current conditions:
 for i in "${WEATHER[@]}"
